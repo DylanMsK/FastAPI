@@ -1,21 +1,25 @@
-from typing import Union, Dict
-
 from fastapi import FastAPI
-from pydantic import BaseModel
 
-from src.config import settings
+from src.config import get_settings
+from src.middlewares import CustomHTTPMiddleware
+from src.logging import set_logger
 
+settings = get_settings()
 app = FastAPI(**settings.APP_CONFIG.dict())
+app.add_middleware(CustomHTTPMiddleware)
 
-print(settings)
 
-
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
+@app.on_event("startup")
+async def startup_event():
+    set_logger()
 
 
 @app.get("/healthcheck", include_in_schema=False)
-async def healthcheck() -> Dict[str, str]:
+async def healthcheck():
     return {"status": "ok"}
+
+
+# if __name__ == "__main__":
+#     import uvicorn
+
+#     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

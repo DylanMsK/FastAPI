@@ -10,6 +10,8 @@ export APP_MODULE=${APP_MODULE:-"$MODULE_NAME:$VARIABLE_NAME"}
 
 HOST="127.0.0.1"
 PORT="8000"
+LOG_LEVEL=${LOG_LEVEL:-info}
+LOG_CONFIG=${LOG_CONFIG:-logging.ini}
 
 # Start Uvicorn with live reload
-exec uvicorn --reload --proxy-headers --host $HOST --port $PORT "$APP_MODULE"
+exec uvicorn --reload --proxy-headers --host $HOST --port $PORT --use-colors --log-config $LOG_CONFIG "$APP_MODULE"

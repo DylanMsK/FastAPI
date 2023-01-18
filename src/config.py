@@ -15,6 +15,9 @@ class AppConfig(BaseModel):
     version: str = config["DEFAULT"]["VERSION"]
     description: str = config["DEFAULT"]["DESCRIPTION"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
 
 class GlobalSettings(BaseSettings):
     APP_CONFIG: AppConfig = AppConfig()
@@ -41,6 +44,3 @@ def get_settings():
     if settings.ENVIRONMENT.is_debug:
         return DevelopmentSettings(**settings.dict())
     return ProductionSettings(**settings.dict())
-
-
-settings = get_settings()
