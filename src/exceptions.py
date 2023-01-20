@@ -5,10 +5,23 @@ from fastapi import HTTPException, status
 
 class DetailedHTTPException(HTTPException):
     STATUS_CODE = status.HTTP_500_INTERNAL_SERVER_ERROR
-    DETAIL = "Server error"
+    CODE = f"COM{STATUS_CODE}"
+    DETAIL = "Server Error"
 
-    def __init__(self, **kwargs: Dict[str, Any]) -> None:
+    def __init__(self, detail: str = None, **kwargs: Dict[str, Any]) -> None:
+        if isinstance(detail, str) and len(detail) > 0:
+            self.DETAIL = detail
         super().__init__(status_code=self.STATUS_CODE, detail=self.DETAIL, **kwargs)
+
+    # def __init__(
+    #     self,
+    #     status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR,
+    #     detail: Any = None,
+    #     headers: Optional[Dict[str, Any]] = None,
+    # ) -> None:
+    #     if isinstance(detail, str) and len(detail) > 0:
+    #         self.DETAIL = detail
+    #     super().__init__(status_code=status_code, detail=self.DETAIL, headers=headers)
 
 
 class PermissionDenied(DetailedHTTPException):
@@ -18,6 +31,7 @@ class PermissionDenied(DetailedHTTPException):
 
 class NotFound(DetailedHTTPException):
     STATUS_CODE = status.HTTP_404_NOT_FOUND
+    DETAIL = "Not Found"
 
 
 class BadRequest(DetailedHTTPException):
@@ -27,7 +41,7 @@ class BadRequest(DetailedHTTPException):
 
 class NotAuthenticated(DetailedHTTPException):
     STATUS_CODE = status.HTTP_401_UNAUTHORIZED
-    DETAIL = "User not authenticated"
+    DETAIL = "Not Authenticated"
 
     def __init__(self) -> None:
         super().__init__(headers={"WWW-Authenticate": "Bearer"})

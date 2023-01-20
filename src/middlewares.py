@@ -38,10 +38,18 @@ class CustomMiddleware(BaseHTTPMiddleware):
         else:
             req_body = None
 
-        log_data["status_code"] = response.status_code
+        status_code = response.status_code
+
+        log_data["status_code"] = status_code
         log_data["latency"] = latency
         log_data["req_body"] = req_body
-        logger.info(msg=log_data)
+
+        if status_code >= 500:
+            logger.error(log_data)
+        elif status_code >= 400:
+            logger.warning(log_data)
+        else:
+            logger.info(log_data)
         return response
 
 
