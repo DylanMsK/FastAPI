@@ -17,7 +17,7 @@ class CustomMiddleware(BaseHTTPMiddleware):
 
         start = time.time()
         log_data = {
-            "id": request_id,
+            "request_id": request_id,
             "headers": dict(zip(request.headers.keys(), request.headers.values())),
             "method": request.method,
             "path": request.url.path,

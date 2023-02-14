@@ -1,7 +1,7 @@
 import configparser
 from functools import lru_cache
 
-from pydantic import BaseModel, BaseSettings, PostgresDsn
+from pydantic import BaseModel, BaseSettings
 
 from src.constants import Environment
 
@@ -26,7 +26,6 @@ class GlobalSettings(BaseSettings):
 
 class DevelopmentSettings(GlobalSettings):
     SITE_DOMAIN: str
-    DATABASE_URL: PostgresDsn
 
     class Config:
         env_file = "dev.env"
@@ -34,7 +33,6 @@ class DevelopmentSettings(GlobalSettings):
 
 class ProductionSettings(GlobalSettings):
     SITE_DOMAIN: str
-    DATABASE_URL: PostgresDsn
 
     class Config:
         env_file = "prod.env"

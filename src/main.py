@@ -10,6 +10,7 @@ from src.route import BaseAPIRoute
 from src.logging import set_logger
 from src import exception_handlers
 from src.response import ErrorResponse, Response
+from src.todos.router import router as todo_router
 
 
 app = FastAPI(
@@ -31,7 +32,7 @@ async def startup_event():
     set_logger()
 
 
-@app.get("/healthcheck", include_in_schema=False)
+@app.get("/healthcheck")
 async def healthcheck():
     return {"status": "ok"}
 
@@ -48,13 +49,8 @@ def origin(data: Item):
 
 @router.post("/post-test", response_model=Response[Item])
 def post_test(data: Item):
-    # raise ValueError()
-    # raise NotAuthenticated()
     return Response[Item](data=data)
 
 
-app.include_router(router)
-# if __name__ == "__main__":
-#     import uvicorn
-
-#     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+# app.include_router(router)
+app.include_router(todo_router)

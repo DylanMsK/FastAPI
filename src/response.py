@@ -1,13 +1,20 @@
-from typing import Generic, TypeVar, Optional
+from typing import Generic, TypeVar, Optional, List
 
 from pydantic import BaseModel
 from pydantic.generics import GenericModel
 
-DataT = TypeVar("DataT")
+Model = TypeVar("Model", bound=BaseModel)
 
 
-class Response(GenericModel, Generic[DataT]):
-    data: Optional[DataT]
+class Response(GenericModel, Generic[Model]):
+    data: Optional[Model]
+
+
+class PaginatedResponse(GenericModel, Generic[Model]):
+    total: int
+    page: int = 1
+    size: int = 10
+    data: List[Model]
 
 
 class Error(BaseModel):
