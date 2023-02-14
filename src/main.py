@@ -4,16 +4,13 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pydantic import BaseModel
 
-from src.config import get_settings
+from src.config import settings
 from src.middlewares import CustomMiddleware
 from src.route import BaseAPIRoute
 from src.logging import set_logger
 from src import exception_handlers
 from src.response import ErrorResponse, Response
-from src.exceptions import NotAuthenticated
 
-
-settings = get_settings()
 
 app = FastAPI(
     **settings.APP_CONFIG.dict(),
