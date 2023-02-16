@@ -14,4 +14,5 @@ LOG_LEVEL=${LOG_LEVEL:-info}
 LOG_CONFIG=${LOG_CONFIG:-logging.ini}
 
 # Start Uvicorn with live reload
-exec uvicorn --reload --proxy-headers --host $HOST --port $PORT --use-colors --log-config $LOG_CONFIG "$APP_MODULE"
+# exec uvicorn --reload --proxy-headers --host $HOST --port $PORT --use-colors --log-config $LOG_CONFIG "$APP_MODULE"
+exec uvicorn --reload --proxy-headers --host $HOST --port $PORT --access-log "$APP_MODULE"

@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 from fastapi import APIRouter
@@ -5,8 +6,7 @@ from fastapi import APIRouter
 from src.route import BaseAPIRoute
 from src.todos.schemas import Todo
 
-
-router = APIRouter(prefix="/todos", tags=["todos"], route_class=BaseAPIRoute)
+logger = logging.getLogger(__name__)
 
 todos = [
     Todo(title="Motherhood", contents="Nulla gravida vel justo eget sollicitudin."),
@@ -16,7 +16,22 @@ todos = [
     Todo(title="September Issue, The", contents="Donec eget dapibus libero."),
 ]
 
+router = APIRouter(prefix="/todos", tags=["todos"], route_class=BaseAPIRoute)
+
 
 @router.get("", response_model=List[Todo])
-def get_todo_list():
+async def get_todo_list():
+    logger.info("???")
+    raise ValueError("asdfas")
     return todos
+
+
+@router.post("", response_model=Todo)
+async def register_todo(todo: Todo):
+    todos.append(todo)
+    return todo
+
+
+@router.get("/{todo_id}", response_model=Todo)
+async def get_todo(todo_id: int):
+    return todos[todo_id]

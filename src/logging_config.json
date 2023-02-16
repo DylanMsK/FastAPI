@@ -1,0 +1,23 @@
+{
+    "default": {
+        "path": "logs",
+        "filename": "log.log",
+        "level": "info",
+        "rotation": "1 week",
+        "format": "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> <level>{level: <8}</level> <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> <green>{extra[request_id]}</green> | <level>{message}</level>"
+    },
+    "uvicorn.access": {
+        "path": "logs/uvicorn/",
+        "filename": "access.log",
+        "level": "info",
+        "rotation": "1 week",
+        "format": "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> <level>{level: <8}</level> <cyan>{name}</cyan>:<cyan>{function}</cyan> | <level>{message}</level>"
+    },
+    "uvicorn.error": {
+        "path": "logs/uvicorn/",
+        "filename": "error.log",
+        "level": "error",
+        "rotation": "1 week",
+        "format": "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> <level>{level: <8}</level> <cyan>{name}</cyan>:<cyan>{function}</cyan> | <level>{message}</level>"
+    }
+}

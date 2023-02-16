@@ -3,13 +3,12 @@ import traceback
 
 from fastapi import Request, Response
 from fastapi.routing import APIRoute
-from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException
 
 from src.exceptions import DetailedHTTPException
 
 
-logger = logging.getLogger("request")
+logger = logging.getLogger(__name__)
 
 
 class BaseAPIRoute(APIRoute):
@@ -17,20 +16,28 @@ class BaseAPIRoute(APIRoute):
         original_route_handler = super().get_route_handler()
 
         async def custom_route_handler(request: Request) -> Response:
+            req_api_route_data = {"path": request.url.path, "body": None}
+            if request.query_params:
+                req_api_route_data["path"] += f"?{str(request.query_params)}"
+
             try:
-                req_body = await request.json()
-                request.state.req_body = req_body
+                body = await request.json()
+                request.state.body = body
+                req_api_route_data["body"] = body
             except Exception:
                 pass
+            finally:
+                logger.info(req_api_route_data)
 
             try:
                 response: Response = await original_route_handler(request)
+                logger.info("")
                 return response
             except HTTPException as exc:
                 raise exc
             except Exception as exc:
                 msg = {
-                    "id": request.state.request_id,
+                    "error": str(exc),
                     "detail": traceback.format_exc(),
                 }
                 logger.error(msg)

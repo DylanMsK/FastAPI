@@ -9,11 +9,11 @@ from src.response import ErrorResponse
 async def request_validation_exception_handler(request: Request, exc: ValueError):
     content = ErrorResponse(
         error={
-            "code": "COM422",
+            "code": status.HTTP_400_BAD_REQUEST,
             "message": str(exc),
         }
     )
-    return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=content.dict())
+    return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=content.dict())
 
 
 async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
